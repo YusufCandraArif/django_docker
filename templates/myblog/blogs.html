@@ -1,0 +1,137 @@
+{% load static %}
+
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Django Blog - Post</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-2 d-none d-lg-block"></div>
+                    <div class="col-lg-8">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Blog Post!</h1>
+                            </div>
+            {% for post in posts %}
+            <article class="media content-section hovered-tweet">
+                <div style="width: 100%; word-break: break-all;">
+            
+                    <div class="pb-2 row m-0" style="width: 100%; margin-right: 0 !important;">
+                        <div style="padding-left: 0px !important;" class="col-8 no-padding d-flex align-items-center">
+                            <img class="rounded-circle mr-2" style="width: 20px; height: 20px;"
+                                src="{{ post.author.profile.image.url }}">
+                            <a class="mr-2 white-important" href="{% url 'profile-friend' post.author%}">
+                                {{ post.author }}
+                            </a>
+                        </div>
+                        <div class="col-4 d-flex flex-row-reverse no-padding align-items-center"
+                            style="padding-right: 0 !important;">
+                            {% if post.author == user %}
+                            <a class="material-icons ml-2" style="font-size: 14px" href="{% url 'post-delete' post.id %}">delete</a>
+                            <a class="material-icons ml-2" style="font-size: 14px" href="{% url 'post-update' post.id %}">update</a>
+                            {%  endif %}
+                        </div>
+                    </div>
+                    <div class="mb-2" style="width: 100%; height: 1px; background-color: rgba(255, 255, 255, 0.1)"></div>
+                    <a style="color: rgba(5, 5, 5, 0.5) !important;" href="{% url 'post-detail' post.id %}">
+                        <p class="mb-4">
+                            {{ post.title }}
+                        </p>
+                    </a>
+                    <img src="{{ post.image.url }}" alt="img">
+                    <a style="color: rgba(5, 5, 5, 0.5) !important;" href="{% url 'post-detail' post.id %}">
+                        <p class="mb-4">
+                            {{ post.content }}
+                        </p>
+                    </a>
+            
+                    <div class="row">
+                        <div class="col-6" style="display: flex;">
+                            <small style="opacity: 0.4;">
+            
+                                <!-- Like Buttons Here -->
+                                <a href="#" onClick="document.getElementById('likebutton').submit()">
+                                    {% if post.likes == 1  %}
+                                    <i style="color: red; font-size: 16px;" class="far fa-heart"></i>
+                                    {% else %}
+                                    <i style=" font-size: 16px;" class="far fa-heart"></i>
+                                    {% endif %}
+            
+                                    {{post.likes}} like(s)
+            
+                                </a>
+            
+                                <form id="likebutton" method="POST" action="#">
+                                    {% csrf_token %}
+                                    <input type="hidden">
+                                </form>
+            
+            
+                            </small>
+                            <small style="opacity: 0.4; margin-left:15px;">
+                                <a href="/post/{{post.id}}/">
+                                    <i style=" font-size: 16px;" class="far fa-comment"></i> {{ post.number_of_comments }}
+                                    comment(s)
+                                </a>
+            
+                            </small>
+                        </div>
+                        <div class="col-6">
+                            <small style="opacity: 0.4;" class="white-important d-flex full-width flex-row-reverse">
+                                {{ post.date_posted | date:"H:i l, d.m.y" }}
+                            </small>
+                        </div>
+                    </div>
+            
+                </div>
+            </article>
+            {% endfor %}
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+</body>
+
+</html>
